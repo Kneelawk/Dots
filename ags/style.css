@@ -1,0 +1,100 @@
+window {
+    background-color: transparent;
+}
+
+.bar-inner {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+button {
+    min-width: 0;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+button:active {
+    background-color: @theme_selected_bg_color;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+label {
+    color: @theme_fg_color;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+image {
+    color: @theme_fg_color;
+}
+
+.left-box {
+    background-color: @theme_bg_color;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.center-box {
+    background-color: @theme_bg_color;
+    min-width: 300px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.right-box {
+    background-color: @theme_bg_color;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.workspaces button.focused {
+    border-bottom: 3px solid @theme_selected_bg_color;
+}
+
+.workspaces button:hover {
+    border-bottom: 3px solid @theme_fg_color;
+}
+
+.client-title {
+    color: @theme_selected_bg_color;
+}
+
+.notification {
+    color: yellow;
+}
+
+.clock {
+    min-width: 120px;
+}
+
+.applauncher-box {
+    background-color: @theme_bg_color;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.applauncher-box .app {
+    padding: 10px;
+}
+
+.applauncher-box entry {
+    margin-bottom: 10px;
+}
+
+levelbar block, highlight {
+    min-height: 10px;
+}
