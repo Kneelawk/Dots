@@ -6,7 +6,6 @@ App.config({
     windows: [
         // bars
         Bar(0),
-        Bar(1),
 
         // app launcher
         applauncher,
