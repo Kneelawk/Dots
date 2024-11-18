@@ -1,3 +1,8 @@
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$theme_selected_bg_color: #{"@theme_selected_bg_color"};
+$theme_fg_color: #{"@theme_fg_color"};
+$theme_bg_color: #{"@theme_bg_color"};
+
 window {
     background-color: transparent;
 }
@@ -22,7 +27,7 @@ button {
 }
 
 button:active {
-    background-color: @theme_selected_bg_color;
+    background-color: $theme_selected_bg_color;
 }
 
 button:hover {
@@ -30,24 +35,24 @@ button:hover {
 }
 
 label {
-    color: @theme_fg_color;
+    color: $theme_fg_color;
     font-weight: bold;
     text-shadow: none;
 }
 
 image {
-    color: @theme_fg_color;
+    color: $theme_fg_color;
 }
 
 .left-box {
-    background-color: @theme_bg_color;
+    background-color: $theme_bg_color;
     border-radius: 10px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 .center-box {
-    background-color: @theme_bg_color;
+    background-color: $theme_bg_color;
     min-width: 300px;
     border-radius: 10px;
     padding-left: 10px;
@@ -55,22 +60,22 @@ image {
 }
 
 .right-box {
-    background-color: @theme_bg_color;
+    background-color: $theme_bg_color;
     border-radius: 10px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 .workspaces button.focused {
-    border-bottom: 3px solid @theme_selected_bg_color;
+    border-bottom: 3px solid $theme_selected_bg_color;
 }
 
 .workspaces button:hover {
-    border-bottom: 3px solid @theme_fg_color;
+    border-bottom: 3px solid $theme_fg_color;
 }
 
 .client-title {
-    color: @theme_selected_bg_color;
+    color: $theme_selected_bg_color;
 }
 
 .notification {
@@ -82,13 +87,20 @@ image {
 }
 
 .applauncher-box {
-    background-color: @theme_bg_color;
+    background-color: $theme_bg_color;
     border-radius: 10px;
     padding: 10px;
 }
 
 .applauncher-box .app {
     padding: 10px;
+}
+
+.applauncher-box .app icon {
+    min-width: 42px;
+    min-height: 42px;
+    font-size: 42px;
+    margin-right: 8px;
 }
 
 .applauncher-box entry {
