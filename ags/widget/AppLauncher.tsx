@@ -71,3 +71,7 @@ export function AppLauncher() {
             <AppLauncherMain width={500} height={500} text={text} />
         </window>
 }
+
+export function reloadApps() {
+    apps.set(new Apps.Apps())
+}

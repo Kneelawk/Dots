@@ -12,7 +12,7 @@ import { date, MONITOR_POSITIONS } from "../globals"
 
 function Workspaces() {
     const hyprland = Hyprland.get_default()
-    const activeId = bind(hyprland, "focused_workspace").as(ws => ws.id);
+    const activeId = bind(hyprland, "focused_workspace").as(ws => ws?.id ?? -1);
     const workspaces = bind(hyprland, "workspaces").as(ws => ws.filter(({id}) => id >= 0).map(({id}) => <button
             onClick={() => hyprland.dispatch("workspace", `${id}`)}
             className={activeId.as(i => `${i === id ? "focused" : ""}`)} >
@@ -74,7 +74,10 @@ function SysTray({gdkmonitor}: {gdkmonitor: Gdk.Monitor}) {
             App.add_icons(item.icon_theme_path)
         }
 
-        const menu = item.create_menu()
+        let menu = null;
+        if (item.create_menu) {
+            menu = item.create_menu()
+        }
 
         return <button
             onClickRelease={(self, event) => {

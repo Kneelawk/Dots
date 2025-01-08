@@ -2,14 +2,15 @@ import { App } from "astal/gtk3"
 import style from "./style.scss"
 import { Bar, fixBars } from "./widget/Bar"
 import { monitorFile } from "astal"
-import { AppLauncher } from "./widget/AppLauncher"
+import { AppLauncher, reloadApps } from "./widget/AppLauncher"
 
 App.start({
     css: style,
     requestHandler(request: string, res: (response: any) => void) {
-        if (request == "fixBars") {
+        if (request == "reloadAll") {
             fixBars()
-            res("reloading bars")
+            reloadApps()
+            res("reloading all")
             return
         }
         res("unknown command")
