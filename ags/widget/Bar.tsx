@@ -74,29 +74,13 @@ function SysTray({gdkmonitor}: {gdkmonitor: Gdk.Monitor}) {
             App.add_icons(item.icon_theme_path)
         }
 
-        let menu = null;
-        if (item.create_menu) {
-            menu = item.create_menu()
-        }
-
-        return <button
-            onClickRelease={(self, event) => {
-                if (event.button == Astal.MouseButton.PRIMARY) {
-                    const display = Gdk.Display.get_default()
-                    const deviceManager = display?.get_device_manager()
-                    const device = deviceManager?.get_client_pointer()
-                    const [s, x, y] = device?.get_position() || [null, 0, 0]
-                    const model = gdkmonitor.get_model() || ""
-                    const [offx, offy] = MONITOR_POSITIONS[model] || [0, 0]
-                    item.activate(x + offx, y + offy)
-                } else if (event.button == Astal.MouseButton.SECONDARY) {
-                    menu?.popup_at_widget(self, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, null)
-                }
-            }}
-            onDestroy={() => menu?.destroy()}
-            tooltipMarkup={bind(item, "tooltip_markup")}>
-                <icon gIcon={bind(item, "gicon")} />
-            </button>
+        return <menubutton
+            tooltipMarkup={bind(item, "tooltipMarkup")}
+            usePopover={false}
+            actionGroup={bind(item, "actionGroup").as(ag => ["dbusmenu", ag])}
+            menuModel={bind(item, "menuModel")}>
+            <icon gicon={bind(item, "gicon")} />
+        </menubutton>
     }))
 
     return <box>{items}</box>
