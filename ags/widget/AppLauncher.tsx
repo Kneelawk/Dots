@@ -1,10 +1,12 @@
 import app from "ags/gtk4/app"
 import {Astal, Gdk, Gtk} from "ags/gtk4";
 import {createComputed, createState, getScope, Accessor, Setter, For} from "ags"
+import {readFile} from "ags/file"
 import Apps from "gi://AstalApps"
 
 import {APPLAUNCHER_NAME} from "../globals";
 import GObject from "gi://GObject";
+import Gio from "gi://Gio"
 
 const [apps, setApps]: [Accessor<Apps.Apps>, Setter<Apps.Apps>] = createState(new Apps.Apps())
 
@@ -13,13 +15,21 @@ function hide() {
 }
 
 function AppItem({app}: { app: Apps.Application }) {
+    let image
+    if (!app.iconName) {
+        image = <image iconName="" pixelSize={48}/>
+    } else if (Gio.File.new_for_path(app.iconName).query_exists(null)) {
+        image = <image file={app.iconName} pixelSize={48}/>
+    } else {
+        image = <image iconName={app.iconName} pixelSize={48}/>
+    }
     return <button
         onClicked={() => {
             hide()
             app.launch()
         }}>
         <box class="app">
-            <image iconName={app.iconName || ""} pixelSize={48}/>
+            {image}
             <label class="title" label={app.name} xalign={0}/>
         </box>
     </button>
