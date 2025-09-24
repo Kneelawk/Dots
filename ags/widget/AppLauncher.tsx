@@ -1,77 +1,107 @@
-import { App, Astal, Gdk, Gtk } from "astal/gtk3"
-import { Variable } from "astal"
-
+import app from "ags/gtk4/app"
+import {Astal, Gdk, Gtk} from "ags/gtk4";
+import {createComputed, createState, getScope, Accessor, Setter, For} from "ags"
 import Apps from "gi://AstalApps"
 
-import { APPLAUNCHER_NAME } from "../globals";
+import {APPLAUNCHER_NAME} from "../globals";
+import GObject from "gi://GObject";
 
-const apps = Variable(new Apps.Apps())
+const [apps, setApps]: [Accessor<Apps.Apps>, Setter<Apps.Apps>] = createState(new Apps.Apps())
 
 function hide() {
-    App.get_window(APPLAUNCHER_NAME)?.hide()
+    app.get_window(APPLAUNCHER_NAME)?.hide()
 }
 
-function AppItem({app}: {app: Apps.Application}) {
+function AppItem({app}: { app: Apps.Application }) {
     return <button
         onClicked={() => {
             hide()
             app.launch()
         }}>
-            <box className="app">
-                <icon icon={app.icon_name || ""} icon_name={app.icon_name || ""} iconSize={6} pixelSize={48} />
-                <label className="title" label={app.name} xalign={0} truncate />
-            </box>
-        </button>
+        <box class="app">
+            <image iconName={app.iconName || ""} pixelSize={48}/>
+            <label class="title" label={app.name} xalign={0}/>
+        </box>
+    </button>
 }
 
-function AppLauncherMain({width = 500, height = 500, text}: {width: number, height: number, text: Variable<string>}) {
-    const list = Variable.derive([text, apps], (text1, apps1) => apps1.fuzzy_query(text1))
+function AppLauncherMain({width = 500, height = 500, text, setText, visible}: {
+    width: number,
+    height: number,
+    text: Accessor<string>,
+    setText: Setter<string>,
+    visible: (callback: () => void) => void
+}) {
+    const list = createComputed([text, apps], (text1, apps1) => apps1.fuzzy_query(text1))
 
-    const applications = list(l => l.map(app => <AppItem app={app} />))
+    const listBox = <box orientation={Gtk.Orientation.VERTICAL} width_request={width}>
+        <For each={list}>
+            {(item, _: Accessor<number>) => (
+                <AppItem app={item}/>
+            )}
+        </For>
+    </box>
 
-    const listBox = <box vertical width_request={width}>{applications}</box>
+    const entry =
+        <entry
+            hexpand
+            onActivate={() => {
+                hide()
+                list.get()[0]?.launch()
+            }}
+            onNotifyText={({text}) => setText(text)}
+            text={text}/> as Gtk.Entry
 
-    const entry = <entry
-        hexpand
-        onActivate={() => {
-            hide()
-            list.get()[0]?.launch()
-        }}
-        onChanged={self => text.set(self.text)}
-        text={text()} />
-    
+    visible(() => {
+        entry.grab_focus()
+    })
+
     return <box
-        vertical
-        className="applauncher-box">
-            {entry}
-            <scrollable
-                hscroll={Gtk.PolicyType.NEVER}
-                min_content_width={width}
-                min_content_height={height}>
-                    {listBox}
-                </scrollable>
-        </box>
+        orientation={Gtk.Orientation.VERTICAL} class="applauncher-box">
+        {entry}
+        <scrolledwindow
+            hscrollbarPolicy={Gtk.PolicyType.NEVER}
+            minContentWidth={width}
+            minContentHeight={height}>
+            {listBox}
+        </scrolledwindow>
+    </box>
 }
 
 export function AppLauncher() {
-    const text = Variable("")
+    const [text, setText]: [Accessor<string>, Setter<string>] = createState("")
+
+    let visibleListener: () => void
 
     return <window
         name={APPLAUNCHER_NAME}
-        application={App}
+        application={app}
         visible={false}
         exclusivity={Astal.Exclusivity.IGNORE}
-        keymode={Astal.Keymode.ON_DEMAND}
-        onShow={() => text.set("")}
-        onKeyReleaseEvent={(self, event) => {
-            if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                self.hide()
-            }
+        keymode={Astal.Keymode.EXCLUSIVE}
+        onShow={() => setText("")}
+        $={(self) => {
+            const scope = getScope()
+            const conns: Map<GObject.Object, number> = new Map()
+            const keyController = Gtk.EventControllerKey.new()
+            self.add_controller(keyController)
+
+            conns.set(keyController, keyController.connect("key-pressed", (_, keyval, keycode) => {
+                if (keyval === Gdk.KEY_Escape) {
+                    self.hide()
+                }
+            }))
+            conns.set(self, self.connect("show", (_) => {
+                visibleListener?.()
+            }))
+
+            scope.onCleanup(() => conns.forEach((id, obj) => obj.disconnect(id)))
         }}>
-            <AppLauncherMain width={500} height={500} text={text} />
-        </window>
+        <AppLauncherMain width={500} height={500} text={text} setText={setText}
+                         visible={(callback) => visibleListener = callback}></AppLauncherMain>
+    </window>
 }
 
 export function reloadApps() {
-    apps.set(new Apps.Apps())
+    setApps(new Apps.Apps())
 }

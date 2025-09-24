@@ -1,22 +1,27 @@
-import { App } from "astal/gtk3"
+import app from "ags/gtk4/app"
 import style from "./style.scss"
-import { Bar, fixBars } from "./widget/Bar"
-import { monitorFile } from "astal"
-import { AppLauncher, reloadApps } from "./widget/AppLauncher"
+import Bar, {fixBars} from "./widget/Bar"
+import {AppLauncher, reloadApps} from "./widget/AppLauncher";
+import {getScope, Scope} from "ags";
 
-App.start({
+let scope: Scope
+
+app.start({
     css: style,
-    requestHandler(request: string, res: (response: any) => void) {
-        if (request == "reloadAll") {
-            fixBars()
-            reloadApps()
+    requestHandler(argv: string[], res: (response: any) => void) {
+        if (argv[0] == "reloadAll") {
+            scope.run(() => {
+                fixBars()
+                reloadApps()
+            })
             res("reloading all")
             return
         }
-        res("unknown command")
+        res(`unknown command ${argv[0]}`)
     },
     main() {
-        App.get_monitors().map(Bar)
+        scope = getScope()
+        app.get_monitors().map(Bar)
         AppLauncher()
     },
 })

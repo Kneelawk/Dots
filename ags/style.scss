@@ -1,112 +1,142 @@
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$fg-color: #{"@theme_fg_color"};
+$bg-color: #{"@theme_bg_color"};
 $theme_selected_bg_color: #{"@theme_selected_bg_color"};
 $theme_fg_color: #{"@theme_fg_color"};
 $theme_bg_color: #{"@theme_bg_color"};
 
 window {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .bar-inner {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 button {
-    min-width: 0;
-    min-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    background-color: transparent;
-    background-image: none;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    margin: 0;
+  min-width: 0;
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
 }
 
 button:active {
-    background-color: $theme_selected_bg_color;
+  background-color: $theme_selected_bg_color;
 }
 
 button:hover {
-    background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 label {
-    color: $theme_fg_color;
-    font-weight: bold;
-    text-shadow: none;
+  color: $theme_fg_color;
+  font-weight: bold;
+  text-shadow: none;
 }
 
 image {
-    color: $theme_fg_color;
+  color: $theme_fg_color;
 }
 
 .left-box {
-    background-color: $theme_bg_color;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+  background-color: $theme_bg_color;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .center-box {
-    background-color: $theme_bg_color;
-    min-width: 300px;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+  background-color: $theme_bg_color;
+  min-width: 300px;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .right-box {
-    background-color: $theme_bg_color;
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+  background-color: $theme_bg_color;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.workspaces button.focused {
-    border-bottom: 3px solid $theme_selected_bg_color;
+.workspaces button {
+  padding-left: 1px;
+  padding-right: 1px;
+  padding-top: 2px;
+  line-height: 1px;
+}
+
+.workspaces button.empty label {
+  color: transparent;
+}
+
+.workspaces button.present label {
+  color: $theme_fg_color;
+}
+
+.workspaces button.focused label {
+  //border-bottom: 3px solid $theme_selected_bg_color;
+  color: $theme_selected_bg_color;
+}
+
+.workspaces button.requested label {
+  color: orange;
 }
 
 .workspaces button:hover {
-    border-bottom: 3px solid $theme_fg_color;
+  //border-bottom: 3px solid $theme_fg_color;
 }
 
 .client-title {
-    color: $theme_selected_bg_color;
+  color: $theme_selected_bg_color;
 }
 
 .notification {
-    color: yellow;
+  color: yellow;
 }
 
 .clock {
-    min-width: 120px;
+  min-width: 120px;
 }
 
 .applauncher-box {
-    background-color: $theme_bg_color;
-    border-radius: 10px;
-    padding: 10px;
+  background-color: $theme_bg_color;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .applauncher-box .app {
-    padding: 10px;
+  padding: 10px;
 }
 
 .applauncher-box .app icon {
-    min-width: 42px;
-    min-height: 42px;
-    font-size: 42px;
-    margin-right: 8px;
+  min-width: 42px;
+  min-height: 42px;
+  font-size: 42px;
+  margin-right: 8px;
 }
 
 .applauncher-box entry {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 levelbar block, highlight {
-    min-height: 10px;
+  min-height: 10px;
+}
+
+.volumes {
+  margin: 10px;
+}
+
+.volume-path {
+  font-size: 10px;
 }
