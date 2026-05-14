@@ -17,8 +17,8 @@
 
 # See https://wiki.hyprland.org/Configuring/Monitors/
 #monitor=,preferred,auto,auto
-monitor = DP-1,3840x2160@60,1920x0,1
-monitor = HDMI-A-1,1920x1080@60,0x0,1
+monitor = DP-1,3840x2160@60,3840x0,1
+monitor = DP-2,3840x2160@60,0x0,1
 
 
 ###################
@@ -43,8 +43,18 @@ $browser2 = ~/Firefox/firefox/firefox
 
 env = XCURSOR_SIZE,24
 env = HYPRCURSOR_SIZE,24
+env = GDK_BAXCKEND,wayland,x11,*
+env = QT_QPA_PLATFORM,wayland;xcb
+env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+env = SDL_VIDEODRIVER,wayland
+env = CLUTTER_BACKEND,wayland
+env = XDG_CURRENT_DESKTOP,Hyprland
+env = XDG_SESSION_TYPE,wayland
+env = XDG_SESSION_DESKTOP,Hyprland
 
 env = GTK_THEME,Breeze-Gently
+env = QT_QPA_PLATFORMTHEME,kde
+#env = QT_STYLE_OVERRIDE,kvantum
 
 # Fix KDE stuff not knowing how to open things
 env = XDG_MENU_PREFIX,arch-
@@ -59,12 +69,14 @@ env = XDG_MENU_PREFIX,arch-
 
 exec = gsettings set org.gnome.desktop.interface gtk-theme "Breeze-Gently"   # for GTK3 apps
 exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
+exec = gsettings set org.gnome.desktop.interface icon-theme "breeze-dark"
 
 exec-once = /usr/lib/polkit-kde-authentication-agent-1
 exec = ags run
 exec-once = hyprpaper
 exec-once = hypridle
 exec-once = clipse -listen
+exec-once = nm-applet
 exec = kbuildsycoca6
 # exec-once = $terminal
 # exec-once = nm-applet &
@@ -147,7 +159,7 @@ animations {
 
 # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
 dwindle {
-    pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+    # pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
     preserve_split = true # You probably want this
 }
 
@@ -160,6 +172,7 @@ master {
 misc { 
     force_default_wallpaper = -1 # Set to 0 or 1 to disable the anime mascot wallpapers
     disable_hyprland_logo = false # If true disables the random hyprland logo / anime girl background. :(
+    allow_session_lock_restore = true
 }
 
 
@@ -172,7 +185,7 @@ input {
     kb_layout = us
     kb_variant =
     kb_model =
-    kb_options =
+    kb_options = compose:ralt
     kb_rules =
 
     follow_mouse = 1
@@ -182,6 +195,11 @@ input {
     touchpad {
         natural_scroll = false
     }
+}
+
+device {
+    name = wacom-intuos-bt-s-pen
+    output = DP-1
 }
 
 # https://wiki.hyprland.org/Configuring/Variables/#gestures
@@ -217,7 +235,7 @@ bind = $mainMod SHIFT, F, exec, $browser2
 bind = $mainMod, V, togglefloating,
 bind = $mainMod, R, exec, $menu
 bind = $mainMod, Period, pseudo, # dwindle
-bind = $mainMod, Slash, togglesplit, # dwindle
+bind = $mainMod, Slash, layoutmsg, togglesplit# dwindle
 
 # Move focus with mainMod + arrow keys
 bind = $mainMod, H, movefocus, l
@@ -323,6 +341,10 @@ bind = SHIFT, Print, exec, grim -g "$(slurp -d)" - | wl-copy
 # Launch Octave
 bind = $mainMod, O, exec, kitty octave
 
+bind = $mainMod, F11, fullscreen, 1
+bind = $mainMod CTRL, F11, fullscreen, 0
+bind = $mainMod SHIFT, F11, fullscreenstate, 0 2
+
 
 ##############################
 ### WINDOWS AND WORKSPACES ###
@@ -337,18 +359,36 @@ bind = $mainMod, O, exec, kitty octave
 # Example windowrule v2
 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
 
-windowrule = suppressevent maximize, class:.* # You'll probably like this.
+windowrule {
+    name = prevent-maximize
+    match:class = *
+
+    suppress_event = maximize
+}
 #windowrule = float, class:Vivaldi-stable
 #windowrule = float, class:vivaldi-stable
+windowrule = match:class ^(Tor Browser)$, float on
 
-windowrule = opacity 0.8 1.0, class:^(kitty)$
-windowrule = noblur, class:^(kitty)$
+windowrule = match:class ^(kitty)$, opacity 0.8 1.0
+windowrule = match:class ^(kitty)$, no_blur on
 
-windowrule = noinitialfocus, class:^(Adobe Substance 3D Painter)$
-windowrule = noinitialfocus, class:^(Substance Designer)$
+windowrule = match:class ^(Adobe Substance 3D Painter)$, no_initial_focus on
+windowrule = match:class ^(Substance Designer)$, no_initial_focus on
 
-#workspace = 2, monitor:HDMI-A-1, default:true, persistent:true
-workspace = 17, monitor:HDMI-A-1, default:true, persistent:true
+windowrule = match:class ^(hyprland-dialog)$, no_initial_focus on
+
+windowrule {
+    name = pin-effy
+    match:title = ^(Discord Popout)$
+
+    float = on
+    pin = on
+}
+
+windowrule = match:class ^(steam_app_438100)$, float on
+
+#workspace = 2, monitor:DP-2, default:true, persistent:true
+workspace = 17, monitor:DP-2, default:true, persistent:true
 
 workspace = 1, monitor:DP-1
 workspace = 2, monitor:DP-1
