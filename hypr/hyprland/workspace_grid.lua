@@ -26,7 +26,7 @@ local binds = {
 
 function workspace_binds(key, number)
   hl.bind(winMod .. " + " .. key, hl.dsp.focus({ workspace = number }))
-  hl.bind(winMod .. " + SHIFT + " .. key, hl.dsp.focus({ workspace = number }))
+  hl.bind(winMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = number }))
 end
 
 for key,value in pairs(binds) do

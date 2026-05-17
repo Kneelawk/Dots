@@ -50,7 +50,7 @@ hl.window_rule({
 hl.window_rule({
   name = "game-float",
   match = {
-    "^(steam_app_438100)$",
+    class = "^(steam_app_438100)$",
   },
 
   float = true,

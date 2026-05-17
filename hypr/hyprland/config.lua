@@ -18,6 +18,10 @@ browser     = "librewolf"
 browser2    = "~/Firefox/firefox/firefox"
 reload_cmd  = "hyprctl reload"
 reload_ags  = "ags request reloadAll"
+octave      = "kitty octave"
+numpy       = "kitty python -i ~/.pythonrc"
+qalc        = "kitty qalc"
+lock_screen = "loginctl lock-session"
 
 
 ----------------
@@ -27,4 +31,8 @@ reload_ags  = "ags request reloadAll"
 mainMod = "SUPER" -- Sets "Windows" key as main modifier
 winMod = "SUPER + CTRL"
 
+-- Mouse buttons
+mouseDevices = { "corsair-corsair-scimitar-rgb-elite-gaming-mouse-keyboard" }
+discordPTT = "3"
+minecraftPTT = "2"
 

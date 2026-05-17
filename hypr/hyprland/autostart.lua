@@ -49,6 +49,11 @@ hl.env("CLUTTER_BACKEND", "wayland")
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+
+hl.env("GTK_THEME", "Breeze-Gently")
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
+hl.env("XDG_MENU_PREFIX", "arch-")
+
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 

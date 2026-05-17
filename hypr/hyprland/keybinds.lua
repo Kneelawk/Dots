@@ -56,3 +56,33 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
+-- Fullscreen keybinds
+hl.bind(mainMod .. " + F11", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + F11", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
+hl.bind(mainMod .. " + CTRL + F11", hl.dsp.window.fullscreen_state({ internal = -1, client = 2, action = "toggle" }))
+hl.bind(mainMod .. " + ALT + F11", hl.dsp.window.fullscreen_state({ internal = -1, client = -1, action = "set" }))
+
+-- Launch Calculators
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(octave))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(numpy))
+hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(qalc))
+
+-- App Push-To-Talk buttons
+local mouseDevice = { device = { inclusive = true, list = mouseDevices }, ignore_mods = true }
+local mouseDeviceR = { device = { inclusive = true, list = mouseDevices }, ignore_mods = true, release = true }
+
+function pushToTalk(key, outputMod, outputKey, window)
+  hl.bind(key, hl.dsp.send_shortcut({ mods = outputMod, key = outputKey, window = window }), mouseDevice)
+  hl.bind(key, hl.dsp.send_shortcut({ mods = outputMod, key = outputKey, window = window }), mouseDeviceR)
+end
+
+pushToTalk(discordPTT, "", "F12", "class:^(vesktop|discord)$")
+pushToTalk(minecraftPTT, "", "code:193", "title:.*Minecraft.*")
+
+-- Lock Screen
+hl.bind(mainMod .. " + ALT + L", hl.dsp.exec_cmd(lock_screen))
+
+-- Screenshot
+hl.bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)"'))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
+
