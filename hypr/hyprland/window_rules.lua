@@ -59,11 +59,12 @@ hl.window_rule({
 hl.window_rule({
   name = "pin-effy",
   match = {
-    class = "^(Discord Popout)$",
+    initial_title = "^(Discord Popout)$",
   },
 
   float = true,
   pin = true,
+  opacity = "1.0 1.0",
 })
 
 hl.window_rule({ match = { class = "^(Tor Browser)$" }, float = true })

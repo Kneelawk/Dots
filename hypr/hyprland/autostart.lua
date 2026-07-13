@@ -23,6 +23,10 @@ end
 
 hl.on("hyprland.start", function ()
   repeat_runs()
+  
+  -- Tell systemd that there is a graphical session running
+  hl.exec_cmd("systemctl --user start hyprland-session.target")
+
   hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("hypridle")
@@ -31,6 +35,10 @@ hl.on("hyprland.start", function ()
 end)
 
 hl.on("config.reloaded", repeat_runs)
+
+hl.on("hyprland.shutdown", function()
+  os.execute("systemctl --user stop hyprland-session.target && sleep 0.1")
+end)
 
 
 -------------------------------

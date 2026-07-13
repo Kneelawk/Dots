@@ -77,7 +77,7 @@ function pushToTalk(key, outputMod, outputKey, window)
 end
 
 pushToTalk(discordPTT, "", "F12", "class:^(vesktop|discord)$")
-pushToTalk(minecraftPTT, "", "code:193", "title:.*Minecraft.*")
+pushToTalk(minecraftPTT, "", "code:193", "class:^(.*Minecraft.*)$")
 
 -- Lock Screen
 hl.bind(mainMod .. " + ALT + L", hl.dsp.exec_cmd(lock_screen))
